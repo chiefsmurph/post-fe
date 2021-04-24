@@ -37,7 +37,7 @@ input {
 
 label {
   display: flex;
-  width: 15vw;
+  /* width: 15vw; */
 }
 
 /* home */
