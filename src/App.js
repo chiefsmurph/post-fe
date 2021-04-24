@@ -44,7 +44,7 @@ const withFormValues = fn => evt => {
   return fn(values);
 };
 
-const API_ENDPOINT = `http://38.108.119.159:3028`;
+const API_ENDPOINT = `https://chiefsmurph.com/post-api`;
 
 const AuthToken = () => <b>auth token</b>;
 
