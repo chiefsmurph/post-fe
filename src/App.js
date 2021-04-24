@@ -44,18 +44,26 @@ const withFormValues = fn => evt => {
   return fn(values);
 };
 
-const API_ENDPOINT = `http://localhost:3028`;
+const API_ENDPOINT = `http://38.108.119.159:3028`;
 
 const AuthToken = () => <b>auth token</b>;
 
-const UrlSubmit = ({ authToken, onSubmit }) => {
-  console.log({authToken})
+const UrlSubmit = ({ authToken, onSubmit, onError }) => {
+  console.log({authToken});
+  const [loading, setLoading] = useState(false);
   const localOnSubmit = evt => {
     evt.preventDefault();
     const url = document.querySelector('[name="url"]').value;
+    if (!(new RegExp("https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)")).test(url)) {
+      alert(`sorry this is not a valid url\n${url}`);
+      document.querySelector('[name="url"]').value = '';
+      document.querySelector('[name="url"]').focus();
+      return;
+    }
     console.log({ url });
-    console.log({authToken})
-    fetch(`${API_ENDPOINT}/api/post/screenshot?url=${url}`, {
+    console.log({authToken});
+    setLoading(true);
+    fetch(`${API_ENDPOINT}/api/post/screenshot?url=${encodeURIComponent(url)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +74,14 @@ const UrlSubmit = ({ authToken, onSubmit }) => {
       url,
       screenshot: response.filename
     }))
+    .catch(e => {
+      alert('ERROR WITH THIS URL');
+      onError();
+    });
   };
+  if (loading) {
+    return <div><form><h2>loading...</h2></form></div>
+  }
   return (
     <div>
       <form onSubmit={localOnSubmit}>
@@ -107,7 +122,7 @@ const MessageSubmit = ({ authToken, url, screenshot, onSubmit }) => {
         <h1>{url}</h1>
         <div className="side-by-side">
           <img src={`${API_ENDPOINT}/screenshots/${screenshot}`} />
-          <textarea name="message" />
+          <textarea name="message" autoFocus placeholder="message goes here" />
         </div>
         <input type="submit" value="Submit" />
       </form>
@@ -118,13 +133,13 @@ const MessageSubmit = ({ authToken, url, screenshot, onSubmit }) => {
 const PostCreator = ({ authToken, onSubmit }) => {
   const [post, setPost] = useState({});
   if (!post.url) {
-    return <UrlSubmit authToken={authToken} onSubmit={setPost} />
+    return <UrlSubmit authToken={authToken} onSubmit={setPost} onError={onSubmit} />
   } else {
     return (
       <MessageSubmit 
         authToken={authToken} 
         {...post} 
-        onSubmit={onSubmit} 
+        onSubmit={onSubmit}
       />
     );
   }
@@ -134,6 +149,7 @@ const SemiTransBg = ({ onClick }) => <div className="semi-trans-bg" onClick={onC
 
 const Home = ({ authToken }) => {
   const [posts, setPosts] = useState([]);
+  const [loggedInAs, setLoggedInAs] = useState(undefined);
   const refreshPosts = () => {
     console.log('refreshing posts')
     fetch(`${API_ENDPOINT}/api/post`, {
@@ -155,20 +171,61 @@ const Home = ({ authToken }) => {
   };
   useEffect(() => {
     refreshPosts();
+    fetch(`${API_ENDPOINT}/api/user`, {
+      method: 'GET', // *GET, POST, PUT, DELETE, etc.
+      // mode: 'cors', // no-cors, *cors, same-origin
+      // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      // credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      // redirect: 'follow', // manual, *follow, error
+      // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      // body: JSON.stringify(values) // body data type must match "Content-Type" header
+    })
+    .then(response => response.json())
+    .then(({ data }) => setLoggedInAs(data.username));
   }, []);
+  const deletePost = id => {
+    fetch(`${API_ENDPOINT}/api/post/${id}`, {
+      method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+      // mode: 'cors', // no-cors, *cors, same-origin
+      // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      // credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      // redirect: 'follow', // manual, *follow, error
+      // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      // body: JSON.stringify(values) // body data type must match "Content-Type" header
+    })
+    .then(response => response.json())
+    .then(() => refreshPosts());
+  };
   const [creatingPost, setCreatingPost] = useState(false);
   return (
     <div className="home">
       <h1>posts</h1>
+      <i>you are logged in as {loggedInAs}</i><br/>
       <button onClick={() => setCreatingPost(true)}>click here to create a new post</button>
       <hr/>
       {
-        posts.map(({ url, message, createdBy: { username }, createdAt }) => (
+        posts.map(({ url, message, createdBy: { username }, createdAt, screenshot, _id }) => (
           <div className="post">
-            <a href={url}>{url}</a><br/>
-            <pre>{message}</pre>
-            <i>- {username}</i><br/>
-            <i>posted on {(new Date(createdAt)).toLocaleString()}</i>
+            {/* <div className="side-by-side"> */}
+              {screenshot && <img src={`${API_ENDPOINT}/screenshots/${screenshot}`} className="screenshot"/>}
+              <pre>{message}</pre>
+            {/* </div> */}
+            <a href={url} target="_blank">{url}</a><br/>
+            <i>posted by {username}</i><br/>
+            <i>posted on {(new Date(createdAt)).toLocaleString()}</i><br/>
+            {
+              username === loggedInAs && <button onClick={() => deletePost(_id)}>click here to delete this post</button>
+            }
           </div>
         ))
       }
@@ -189,7 +246,7 @@ function App() {
   const signUpSuccess = token => {
     window.localStorage.setItem('postToken', token);
     setAuthToken(token);
-    isLoggedIn(true);
+    setIsLoggedIn(true);
   };
   const signUp = withFormValues(values => {
     fetch(`${API_ENDPOINT}/signup`, {
