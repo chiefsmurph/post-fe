@@ -54,7 +54,8 @@ const UrlSubmit = ({ authToken, onSubmit, onError }) => {
   const localOnSubmit = evt => {
     evt.preventDefault();
     const url = document.querySelector('[name="url"]').value;
-    if (!(new RegExp("https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)")).test(url)) {
+    const urlRegex = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
+    if (!urlRegex.test(url)) {
       alert(`sorry this is not a valid url\n${url}`);
       document.querySelector('[name="url"]').value = '';
       document.querySelector('[name="url"]').focus();

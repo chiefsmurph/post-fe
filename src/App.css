@@ -18,8 +18,8 @@ form {
   position: absolute;
   top: 30%;
   left: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  -ms-transform: translateY(-30%);
+  transform: translateY(-30%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
   text-align: center;
