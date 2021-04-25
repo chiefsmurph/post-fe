@@ -214,16 +214,18 @@ const Home = ({ authToken }) => {
       <h1>posts</h1>
       <i>you are logged in as {loggedInAs}</i><br/>
       <button onClick={() => setCreatingPost(true)}>click here to create a new post</button>
-      <hr/>
+      <br/><br/>
       {
         posts.map(({ url, message, createdBy: { username }, createdAt, screenshot, _id }) => (
           <div className="post">
             {/* <div className="side-by-side"> */}
-            {screenshot && <img src={`${API_ENDPOINT}/screenshots/${screenshot}`} className="screenshot"/>}
-            <a href={url} target="_blank">{url}</a><br/>
+            <a href={url} target="_blank">
+              {screenshot && <img src={`${API_ENDPOINT}/screenshots/${screenshot}`} className="screenshot"/>}
+              {url}
+            </a>
             <pre>{message}</pre><br/>
             <i>posted on {(new Date(createdAt)).toLocaleString()}</i>
-            <i>posted by {username}</i><br/>
+            <i>posted by {username}</i>
             {/* </div> */}
             {
               username === loggedInAs && <button onClick={() => deletePost(_id)}>click here to delete this post</button>
