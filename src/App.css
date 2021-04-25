@@ -8,7 +8,6 @@
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 105%;
   line-break: auto;
-  /* word-break: break-all; */
   box-sizing: border-box;
 }
 
@@ -86,9 +85,6 @@ hr {
 .post pre {
   margin: 0;
   font-size: 140%;
-  line-break: anywhere;
-  /* overflow: hidden; */
-  word-break: break-all;
   display: block;
   /* white-space: break-spaces; */
 
