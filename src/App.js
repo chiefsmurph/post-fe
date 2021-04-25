@@ -172,6 +172,7 @@ const Home = ({ authToken }) => {
   };
   useEffect(() => {
     refreshPosts();
+    setInterval(() => refreshPosts(), 1000 * 60);
     fetch(`${API_ENDPOINT}/api/user`, {
       method: 'GET', // *GET, POST, PUT, DELETE, etc.
       // mode: 'cors', // no-cors, *cors, same-origin
