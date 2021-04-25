@@ -121,10 +121,10 @@ const MessageSubmit = ({ authToken, url, screenshot, onSubmit }) => {
       <form onSubmit={localSubmit}>
         <h2>type a message to go along with your post</h2>
         <h1>{url}</h1>
-        <div className="side-by-side">
+        {/* <div className="side-by-side"> */}
           <img src={`${API_ENDPOINT}/screenshots/${screenshot}`} />
           <textarea name="message" autoFocus placeholder="message goes here" />
-        </div>
+        {/* </div> */}
         <input type="submit" value="Submit" />
       </form>
     </div>
@@ -218,12 +218,12 @@ const Home = ({ authToken }) => {
         posts.map(({ url, message, createdBy: { username }, createdAt, screenshot, _id }) => (
           <div className="post">
             {/* <div className="side-by-side"> */}
-              {screenshot && <img src={`${API_ENDPOINT}/screenshots/${screenshot}`} className="screenshot"/>}
-              <pre>{message}</pre>
-            {/* </div> */}
+            {screenshot && <img src={`${API_ENDPOINT}/screenshots/${screenshot}`} className="screenshot"/>}
             <a href={url} target="_blank">{url}</a><br/>
-            <i>posted by {username}</i><br/>
+            <pre>{message}</pre>
             <i>posted on {(new Date(createdAt)).toLocaleString()}</i><br/>
+            <i>posted by {username}</i><br/>
+            {/* </div> */}
             {
               username === loggedInAs && <button onClick={() => deletePost(_id)}>click here to delete this post</button>
             }

@@ -8,10 +8,12 @@
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 105%;
   line-break: auto;
+  box-sizing: border-box;
 }
 
 h1 {
   margin: 1em 0;
+  line-break: anywhere;
 }
 
 form {
@@ -26,12 +28,15 @@ form {
   text-align: center;
   background-color: rgba(100, 100, 100, 0.99);
   border: 1px solid black;
-  padding: 3em;
+  padding: 1em;
   margin-bottom: 3em;
+  width: 600px;
+  max-width: 90vw;
 }
 
 input {
-  margin: 0.2em 1em;
+  width: 100%;
+  /* margin: 0; */
   /* width: 10vw; */
   /* width: 40%; */
 }
@@ -56,14 +61,14 @@ hr {
 .post {
   padding-bottom: 1em;
   border-bottom: 1px solid black;
-  margin-bottom: 5em;
+  margin-bottom: 1em;
 }
 .post a {
   font-size: 150%;
   line-break: anywhere;
 }
 
-.post .screenshot {
+.post img.screenshot {
   width: 100%;
 }
 
@@ -85,12 +90,6 @@ hr {
 h2 {
   margin-bottom: 1em;
 }
-
-input[name="url"] {
-  width: 800px;
-  max-width: 60vw;
-}
-
 .side-by-side {
   display: flex;
   margin-bottom: 1em;
@@ -100,8 +99,9 @@ input[name="url"] {
   margin: 0.5em;
 }
 
-.side-by-side img {
-  max-width: 400px;
+.message-submit img {
+  width: 100%;
+  /* max-width: 400px; */
 }
 
 input[type="submit"] {
@@ -111,4 +111,5 @@ input[type="submit"] {
 
 textarea {
   width: 100%;
+  min-height: 5em;
 }
