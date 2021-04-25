@@ -209,18 +209,28 @@ const Home = ({ authToken }) => {
     .then(() => refreshPosts());
   };
   const [creatingPost, setCreatingPost] = useState(false);
-  return (
-    <div className="home">
-      <h1>posts</h1>
-      <i>you are logged in as {loggedInAs}</i><br/>
-      <button onClick={() => setCreatingPost(true)}>click here to create a new post</button>
-      <br/><br/>
+  return [
+    <div className={`home ${creatingPost ? 'creating-post' : ''}`}>
+      <header>
+        <h1>posts</h1>
+        <i>you are logged in as {loggedInAs}</i><br/>
+        <button onClick={() => setCreatingPost(true)}>click here to create a new post</button>
+      </header>
       {
         posts.map(({ url, message, createdBy: { username }, createdAt, screenshot, _id }) => (
           <div className="post">
             {/* <div className="side-by-side"> */}
             <a href={url} target="_blank">
-              {screenshot && <img src={`${API_ENDPOINT}/screenshots/${screenshot}`} className="screenshot"/>}
+              {screenshot && (
+                <img 
+                  src={
+                    screenshot.includes('://') 
+                      ? screenshot 
+                      : `${API_ENDPOINT}/screenshots/${screenshot}`
+                  }
+                  className="screenshot"
+                />
+              )}
               {url}
             </a>
             <pre>{message}</pre><br/>
@@ -233,12 +243,12 @@ const Home = ({ authToken }) => {
           </div>
         ))
       }
-      { creatingPost && [
-        <SemiTransBg onClick={() => setCreatingPost(false)}/>,
-        <PostCreator authToken={authToken} onSubmit={() => { setCreatingPost(false); refreshPosts(); }}/>,
-      ]}
-    </div>
-  )
+    </div>,
+    ...creatingPost ? [
+      <SemiTransBg onClick={() => setCreatingPost(false)}/>,
+      <PostCreator authToken={authToken} onSubmit={() => { setCreatingPost(false); refreshPosts(); }}/>,
+    ] : []
+  ]
 };
 
 

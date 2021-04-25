@@ -2,10 +2,6 @@ body {
   background-image: url(./drivingshot.jpg);
   background-size: 30%;
 }
-.App {
-  position: relative;
-  min-height: 100vh;
-}
 
 * {
   margin: 0;
@@ -55,6 +51,14 @@ label {
   max-width: 600px;
   padding: 0.5em;
   margin: auto;
+}
+
+.home.creating-post {
+  filter: blur(4px);
+}
+
+.home header {
+  margin-bottom: 1em;
 }
 
 hr {
