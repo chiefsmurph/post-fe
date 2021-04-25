@@ -220,8 +220,8 @@ const Home = ({ authToken }) => {
             {/* <div className="side-by-side"> */}
             {screenshot && <img src={`${API_ENDPOINT}/screenshots/${screenshot}`} className="screenshot"/>}
             <a href={url} target="_blank">{url}</a><br/>
-            <pre>{message}</pre>
-            <i>posted on {(new Date(createdAt)).toLocaleString()}</i><br/>
+            <pre>{message}</pre><br/>
+            <i>posted on {(new Date(createdAt)).toLocaleString()}</i>
             <i>posted by {username}</i><br/>
             {/* </div> */}
             {

@@ -8,6 +8,7 @@
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 105%;
   line-break: auto;
+  word-break: break-all;
   box-sizing: border-box;
 }
 
@@ -29,7 +30,7 @@ form {
   background-color: rgba(100, 100, 100, 0.99);
   border: 1px solid black;
   padding: 1em;
-  margin-bottom: 3em;
+  padding-bottom: 3em;
   width: 600px;
   max-width: 90vw;
 }
@@ -62,9 +63,19 @@ hr {
   padding-bottom: 1em;
   border-bottom: 1px solid black;
   margin-bottom: 1em;
+  display: flex;
+  flex-direction: column;
 }
 .post a {
   font-size: 150%;
+  /* max-width:200px; */
+  line-break: anywhere;
+  /* display: block; */
+  word-break: break-all;
+  /* overflow:hidden; */
+  /* width:100px; */
+  /* display: block; */
+  /* color: yellow; */
   line-break: anywhere;
 }
 
@@ -75,7 +86,19 @@ hr {
 .post pre {
   margin: 0;
   font-size: 140%;
-  white-space: break-spaces;
+  line-break: anywhere;
+  /* overflow: hidden; */
+  word-break: break-all;
+  display: block;
+  /* white-space: break-spaces; */
+
+
+
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 .semi-trans-bg {
