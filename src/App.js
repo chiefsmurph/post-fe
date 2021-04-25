@@ -250,6 +250,9 @@ function App() {
     setIsLoggedIn(true);
   };
   const signUp = withFormValues(values => {
+    if (Object.values(values).some(val => !val)) {
+      return alert('all fields are mandatory')
+    }
     fetch(`${API_ENDPOINT}/signup`, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       // mode: 'cors', // no-cors, *cors, same-origin
@@ -265,6 +268,9 @@ function App() {
     })
     .then(response => response.json())
     .then(({ token }) => signUpSuccess(token))
+    .catch(e => {
+      alert('error creating account');
+    });
   });
   
   const signIn = withFormValues(values => {
