@@ -1,8 +1,10 @@
+body {
+  background-image: url(./drivingshot.jpg);
+  background-size: 30%;
+}
 .App {
   position: relative;
   min-height: 100vh;
-  background-image: url(./drivingshot.jpg);
-  background-size: 100%;
 }
 
 * {
