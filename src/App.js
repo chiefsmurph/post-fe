@@ -94,7 +94,7 @@ const UrlSubmit = ({ authToken, onSubmit, onError }) => {
   )
 };
 
-const MessageSubmit = ({ authToken, url, screenshot, onSubmit }) => {
+const MessageSubmit = ({ authToken, url, screenshot, onSubmit, onError }) => {
   const localSubmit = evt => {
     evt.preventDefault();
     const message =  document.querySelector('[name="message"]').value;
@@ -114,7 +114,8 @@ const MessageSubmit = ({ authToken, url, screenshot, onSubmit }) => {
     .then(response => {
       console.log({ response });
       onSubmit(response);
-    });
+    })
+    .catch(onError);
   };
   return (
     <div className="message-submit">
@@ -133,14 +134,20 @@ const MessageSubmit = ({ authToken, url, screenshot, onSubmit }) => {
 
 const PostCreator = ({ authToken, onSubmit }) => {
   const [post, setPost] = useState({});
+  const onError = e => {
+    console.error(e);
+    alert('error: uh oh something bad happened');
+    onSubmit();
+  };
   if (!post.url) {
-    return <UrlSubmit authToken={authToken} onSubmit={setPost} onError={onSubmit} />
+    return <UrlSubmit authToken={authToken} onSubmit={setPost} onError={onError} />
   } else {
     return (
       <MessageSubmit 
         authToken={authToken} 
         {...post} 
         onSubmit={onSubmit}
+        onError={onError}
       />
     );
   }
